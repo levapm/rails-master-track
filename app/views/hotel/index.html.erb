@@ -1,0 +1,51 @@
+<% content_for :tools do %>
+
+  <%= link_to( raw('<i class="fa fa-plus"></i> New Hotel'),
+               new_hotel_path(),
+               class: 'btn btn-default pull-left' ) %>
+
+  <form class="form-inline" role="form" id="js-filter-form">
+    <select class="form-control">
+      <option value="" selected>-- select --</option>
+      <% @hotelCategories.each do |cats| %>
+        <option value="<%= cats.hotel_type %>"><%= cats.hotel_type %></option>
+      <% end %>
+    </select>
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search Hotels">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+      </span>
+    </div>
+  </form>
+
+<% end %>
+
+<% content_for :main do %>
+
+  <% @hotels.each do |h| %>
+
+    <div class="col-lg-3 col-md-4 col-sm-6" data-filter="<%= h.hotel_name %> <%= h.hotel_type %>">
+      <div class="hotel">
+        <div class="hotel-img">
+          <img src="<%= h.hotel_image_url %>" alt="...">
+        </div>
+        <div class="hotel-details">
+          <strong><%= h.hotel_name %></strong><hr />
+          <small><%= h.hotel_street %><br />
+          <%= h.hotel_city %> <%= h.hotel_state %> <%= h.hotel_zip %><hr />
+          <i class="fa fa-phone"></i>&nbsp;&nbsp; <%= h.hotel_phone %><br />
+          Parking: $<%= h.hotel_parking_fee %></small>
+        </div>
+        <div class="hotel-tools btn-group">
+          <%= link_to raw('<i class="fa fa-trash-o"></i>'), hotel_path(h.id), method: :delete, class:"btn btn-lg btn-default", confirm: "Are you sure you want to delete #{h.hotel_name}?" %>
+          <%= link_to raw('<i class="fa fa-edit"></i>'), edit_hotel_path(h.id), class:"btn btn-lg btn-default" %>
+          <%= link_to raw('<i class="fa fa-map-marker"></i>'), hotel_directions_path(h.id), class:"btn btn-lg btn-default" %>
+          <%= link_to raw('<i class="fa fa-plus"></i>'), new_reservation_url(), class:"btn btn-lg btn-default", action: 'new' %>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+
+<% end %>
